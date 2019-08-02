@@ -25,6 +25,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -123,12 +124,6 @@ class ProgramController extends Controller
         throw $this->createNotFoundException('Unable to find Project entity.');
       }
     }
-
-//    Right now everyone should find even private programs via the correct link! SHARE-49
-//    if ($program->getPrivate() && $program->getUser()->getId() !== $this->getUser()->getId()) {
-//      // only program owners should be allowed to see their programs
-//      throw $this->createNotFoundException('Unable to find Project entity.');
-//    }
 
     if ($program->isDebugBuild())
     {
@@ -727,5 +722,35 @@ class ProgramController extends Controller
     }
 
     return $isReportedByUser;
+  }
+  /**
+   * @Route("/changeOwnership")
+   */
+  public function changeOwnership()
+  {
+    //connect to db
+    $em = $this->getDoctrine()->getManager();
+    //get all programs from db
+    $programs = $em->getRepository(Program::class)->findAll();
+
+    $program_count= count($programs);
+    $randID = rand ( 1, $program_count);
+
+    $ownership = $em->getRepository(Program::class)->find($randID);
+
+    //if program is already owned
+    while($ownership->getUser()===$this->getUser())
+    {
+      $randID= rand(1,$program_count);
+    }
+    $ownership->setUser($this->getUser());
+
+
+    $em->flush();
+    return $this->redirectToRoute('profile');
+
+
+
+
   }
 }
