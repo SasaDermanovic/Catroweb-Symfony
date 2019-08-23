@@ -194,7 +194,7 @@ let MyProfile = function (profile_url, save_username,
       $('.swal2-container.swal2-shown').css('background-color', 'rgba(255, 0, 0, 0.75)')//changes the color of the overlay
     })
   })
-
+  
   $(document).on('click', '#save-email', function () {
     $(this).hide()
     $('#email-ajax').show()
@@ -265,7 +265,7 @@ let MyProfile = function (profile_url, save_username,
     $('.error-message').addClass('d-none')
     
     let new_username = username.val()
-
+    
     $.post(self.save_username, {
       username: new_username
     }, function (data) {

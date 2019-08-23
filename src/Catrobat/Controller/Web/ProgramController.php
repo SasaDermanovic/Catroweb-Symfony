@@ -25,7 +25,6 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -213,10 +212,10 @@ class ProgramController extends Controller
   public function programLikeAction(Request $request, $id)
   {
     /**
-     * @var ProgramManager           $program_manager
-     * @var User                     $user
-     * @var Program                  $program
-     * @var CatroNotification        $notification
+     * @var ProgramManager $program_manager
+     * @var User $user
+     * @var Program $program
+     * @var CatroNotification $notification
      * @var CatroNotificationService $notification_service
      */
 
@@ -445,7 +444,7 @@ class ProgramController extends Controller
    *   options={"expose"=true}, requirements={"id":"\d+"}, methods={"GET"})
    *
    * @param integer $id
-   * @param string  $newDescription
+   * @param string $newDescription
    *
    * @return Response
    * @throws Exception
@@ -454,8 +453,8 @@ class ProgramController extends Controller
   public function editProgramDescription($id, $newDescription)
   {
     /**
-     * @var User           $user
-     * @var Program        $program
+     * @var User $user
+     * @var Program $program
      * @var ProgramManager $program_manager
      */
 
@@ -723,33 +722,38 @@ class ProgramController extends Controller
 
     return $isReportedByUser;
   }
+
   /**
-   * @Route("/changeOwnership")
+   * @Route("/program_change_ownership", name="program_change_ownership")
+   *
+   * @return RedirectResponse
    */
-  public function changeOwnership()
+  public function changeOwnershipAction()
   {
     //connect to db
     $em = $this->getDoctrine()->getManager();
-    //get all programs from db
-    $programs = $em->getRepository(Program::class)->findAll();
 
-    $program_count= count($programs);
-    $randID = rand ( 1, $program_count);
+    /** @var ProgramManager $programs */
+    $programs = $this->get('programmanager');
 
-    $ownership = $em->getRepository(Program::class)->find($randID);
+    $program_count = count($programs->findAll());
+    $randID = rand(1, $program_count);
+
+    $ownership = $programs->find($randID);
 
     //if program is already owned
-    while($ownership->getUser()===$this->getUser())
+    while ($ownership->getUser() === $this->getUser())
     {
-      $randID= rand(1,$program_count);
+      $randID = rand(1, $program_count);
+      $ownership = $programs->find($randID);
+
     }
     $ownership->setUser($this->getUser());
 
 
     $em->flush();
+
     return $this->redirectToRoute('profile');
-
-
 
 
   }

@@ -50,6 +50,7 @@ indexPage:
       title: 'What programs are recommended here?'
       description: 'The more Likes (including "Thumbs up", "Laugh", "Love" and "Woow!") your program receives, the higher it appears in this list.'
 
+
 programs:
   welcome:
     title: Welcome to Catrobat's %theme%
@@ -208,6 +209,7 @@ profile:
   secondEmail: My second email
   myPrograms: My programs
   follows: Follows
+  ownership: Change ownership
   follower: Follower
   unfollowUser: Unfollow this user!
   followUser: Follow this user!

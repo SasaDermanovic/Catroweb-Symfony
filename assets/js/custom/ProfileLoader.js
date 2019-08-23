@@ -98,7 +98,7 @@ let ProfileLoader = function (profile_id, url, profile_url, container, default_p
     $.get(url, function (data) {
       $(self.container).append('<div class="no-programs text-center">' + data + '</div>')
     })
-
+    
   }
   
 }

@@ -42,6 +42,7 @@ let ProjectLoader = function(container, url, recommended_by_project_id, recommen
         $(self.container).hide()
         return
       }
+      $(self.container).show()
       self.total_number_of_found_projects = parseInt(data.CatrobatInformation.TotalProjects)
       setup(data)
     })
@@ -64,6 +65,7 @@ let ProjectLoader = function(container, url, recommended_by_project_id, recommen
         $(self.container).hide()
         return
       }
+      $(self.container).show()
       self.total_number_of_found_projects = parseInt(data.CatrobatInformation.TotalProjects)
       setup(data)
     })
@@ -86,6 +88,7 @@ let ProjectLoader = function(container, url, recommended_by_project_id, recommen
         $(self.container).hide()
         return
       }
+      $(self.container).show()
       self.total_number_of_found_projects = parseInt(data.CatrobatInformation.TotalProjects)
       self.project_id = project_id
       setup(data)
@@ -168,7 +171,7 @@ let ProjectLoader = function(container, url, recommended_by_project_id, recommen
     await initParameters()
     await initNumberOfVisibleProjects()
     await keepRowsFull()
-
+    
     await updateUIVisibility()
   }
   
@@ -502,12 +505,13 @@ let ProjectLoader = function(container, url, recommended_by_project_id, recommen
       
       case '#recommended':
       case '#specific-programs-recommendations':
-        return data.CatrobatInformation.BaseUrl + project.ProjectUrl +
-        '?rec_by_page_id=' + self.recommended_by_page_id +
-        (self.recommended_by_project_id != null) ?
-          '&rec_by_program_id=' + self.recommended_by_project_id :
-          '' + '&rec_user_specific=' + (('isUserSpecificRecommendation' in data) &&
-          data.isUserSpecificRecommendation ? 1 : 0)
+        let link =  data.CatrobatInformation.BaseUrl + project.ProjectUrl
+        link += '?rec_by_page_id=' + self.recommended_by_page_id
+        if (self.recommended_by_project_id !== null) {
+          link += '&rec_by_program_id=' + self.recommended_by_project_id
+        }
+        link += '&rec_user_specific=' + (('isUserSpecificRecommendation' in data) &&
+        data.isUserSpecificRecommendation ? 1 : 0)
     }
     return data.CatrobatInformation.BaseUrl + project.ProjectUrl
   }
