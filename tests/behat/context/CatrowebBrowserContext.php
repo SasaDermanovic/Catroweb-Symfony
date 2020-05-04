@@ -2393,7 +2393,7 @@ class CatrowebBrowserContext extends BrowserContext
   {
     $user = $this->insertUser([
       'name' => $arg1,
-      'email' => sprintf('%s', $arg2),
+      'email' => sprintf('%s\n', $arg2),
     ]);
     $this->getUserDataFixtures()->setCurrentUser($user);
   }
